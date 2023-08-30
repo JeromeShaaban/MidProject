@@ -24,6 +24,9 @@ angular.module('favoriteApp', [])
                     category: $scope.realCategories[idx].id
                 }
             }
+            if (text === 'edition') {
+                $scope.realCategories = $scope.categories.filter(function(c) { return c.id !== 0 });
+            }
             $scope.mode = text;
         }
 
@@ -31,8 +34,15 @@ angular.module('favoriteApp', [])
             $scope.setMode('view');
         }
 
+        $scope.edit = function(f) {
+        $scope.favorite = {id: f.id, link: f.link, name: f.name, category: f.categoryDto.id};
+        $scope.setMode('edition');
+        }
+
+        // Pour voir toutes les URL de CRUD définies dans le back : http://localhost:8080/swagger-ui/index.html
+
         $scope.validate = function() {
-            $http.post('api/category/' + $scope.favorite.category + '/favorites' , { id: null, link: $scope.favorite.link, name: $scope.favorite.name }).then(
+            $http.post('api/category/' + $scope.favorite.category + '/favorites' , { id: $scope.favorite.id, link: $scope.favorite.link, name: $scope.favorite.name }).then(
                 function() {
                     $scope.refresh();
                     $scope.setMode('view');
@@ -40,6 +50,34 @@ angular.module('favoriteApp', [])
                     alert(error.data.message);
                 }
             )
+        }
+
+        $scope.deletion = function(id) {
+        Swal.fire({
+          title: 'Are you sure?',
+          text: "You won't be able to revert this!",
+          icon: 'warning',
+          showCancelButton: true,
+          confirmButtonColor: '#3085d6',
+          cancelButtonColor: '#d33',
+          confirmButtonText: 'Yes, delete it!'
+        }).then((result) => {
+          if (result.isConfirmed) {
+            $http.delete('api/favorites/' + id ).then(
+                function() {
+                   $scope.refresh();
+                },
+                function(error) {
+                   alert(error.data.message);
+                }
+            )
+            Swal.fire(
+              'Deleted!',
+              'Your file has been deleted.',
+              'success'
+            )
+          }
+        })
         }
 
         $scope.refresh = function() {
@@ -55,9 +93,7 @@ angular.module('favoriteApp', [])
 
                         console.log(response);
 
-
-                            $scope.favorites = response.data.filter(f => $scope.filter.category === 0 || f.categoryDto.id === $scope.filter.category);
-
+                            $scope.favorites = response.data.filter(f => $scope.filter.category === 0 || $scope.filter.category === f.categoryDto.id);
 
                         }
                     )

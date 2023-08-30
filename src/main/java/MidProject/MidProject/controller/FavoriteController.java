@@ -31,8 +31,8 @@ public class FavoriteController {
         );
     }
 
-    @DeleteMapping(path = "/{id}")
-    @ResponseStatus(code = HttpStatus.OK)
-    public void delete(@PathVariable long id) { ifavoriteService.delete(id);}
+//    @DeleteMapping(path = "/{id}")
+//    @ResponseStatus(code = HttpStatus.OK)
+//    public void delete(@PathVariable long id) { ifavoriteService.delete(id);}
 
 }

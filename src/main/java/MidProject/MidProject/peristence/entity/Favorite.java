@@ -32,7 +32,7 @@ public class Favorite {
     @Column(columnDefinition = "date", name = "date")
     private Date date;
 
-    @ManyToOne(optional = false, fetch = FetchType.EAGER, cascade = CascadeType.ALL)
+    @ManyToOne(optional = false, fetch = FetchType.EAGER)
     @JoinColumn(name = "category_id", nullable = false, referencedColumnName = "id", foreignKey = @ForeignKey(name = "FK_CATEGORY_FAVORITE"))
     @Fetch(FetchMode.JOIN)
     private Category category;
