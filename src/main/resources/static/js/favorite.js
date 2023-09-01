@@ -64,9 +64,10 @@ angular.module('favoriteApp', [])
                     function() {
                         $scope.refresh();
                         $scope.setMode('view');
+                        showAlert('Favorite successfully Added', 3000, 'success', 'fade-in-out', '1s', 'bottom');
                     },
                     function(error) {
-                        alert(error.data.message);
+                        showAlert(error.data.message, 3000, 'danger', 'fade-in-out', '1s', 'bottom');
                     }
                 )
         }
@@ -77,9 +78,10 @@ angular.module('favoriteApp', [])
                     function() {
                         $scope.refresh();
                         $scope.setMode('view');
+                        showAlert('Category successfully Added', 3000, 'success', 'fade-in-out', '1s', 'bottom');
                     },
                     function(error) {
-                        alert(error.data.message);
+                        showAlert(error.data.message, 3000, 'danger', 'fade-in-out', '1s', 'bottom');
                     }
                 )
         }

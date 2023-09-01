@@ -3,16 +3,21 @@ package MidProject.MidProject.service.impl;
 import MidProject.MidProject.dto.DTOFavoriteCreation;
 import MidProject.MidProject.dto.DTOFavoriteItem;
 import MidProject.MidProject.dto.DTOFavoriteListItem;
+import MidProject.MidProject.exception.BusinessException;
 import MidProject.MidProject.exception.NotFoundException;
-import MidProject.MidProject.peristence.entity.Category;
-import MidProject.MidProject.peristence.entity.Favorite;
-import MidProject.MidProject.peristence.repository.ICategoryRepository;
-import MidProject.MidProject.peristence.repository.IFavoriteRepository;
+import MidProject.MidProject.persistence.entity.Category;
+import MidProject.MidProject.persistence.entity.Favorite;
+import MidProject.MidProject.persistence.repository.ICategoryRepository;
+import MidProject.MidProject.persistence.repository.IFavoriteRepository;
 import MidProject.MidProject.service.IFavoriteService;
 import MidProject.MidProject.utils.DTOHelper;
 import jakarta.transaction.Transactional;
+import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.stereotype.Service;
 
+import java.net.HttpURLConnection;
+import java.net.ProtocolException;
+import java.net.URL;
 import java.util.Date;
 import java.util.List;
 
@@ -65,13 +70,22 @@ public class FavoriteService implements IFavoriteService {
     public DTOFavoriteItem createFavorite(long categoryId, DTOFavoriteCreation newFavorite) {
         Category cat = iCategoryRepository.findById(categoryId).orElseThrow(() -> new NotFoundException("No corresponding category found with the id " + categoryId + " !!" ));
         Favorite entity = new Favorite();
+
+        if (!isUrlValid(newFavorite.getLink())) {
+            throw new BusinessException("URL non valide !");
+        }
+
         entity.setCategory(cat);
         entity.setId(newFavorite.getId());
         entity.setName(newFavorite.getName());
         entity.setLink(newFavorite.getLink());
         entity.setDate(new Date());
 
-        entity = iFavoriteRepository.save(entity);
+        try {
+            entity = iFavoriteRepository.save(entity);
+        } catch (DataIntegrityViolationException e) {
+            throw new BusinessException("Ce lien existe déjà dans cette catégorie !");
+        }
         return new DTOFavoriteItem(entity.getId(), entity.getName(), entity.getLink(), entity.getDate(), dtoHelper.toCategoryItem(entity.getCategory()));
     }
 
@@ -80,6 +94,19 @@ public class FavoriteService implements IFavoriteService {
         ids.forEach(id -> delete(id));
     }
 
+
+    private boolean isUrlValid(String link){
+        try {
+            URL url = new URL(link);
+            HttpURLConnection huc = (HttpURLConnection) url.openConnection();
+            int responseCode = huc.getResponseCode();
+            return responseCode == 200;
+        } catch (ProtocolException e) {
+            return true;
+        } catch (Exception e) {
+            return false;
+        }
+    }
 
 
 }

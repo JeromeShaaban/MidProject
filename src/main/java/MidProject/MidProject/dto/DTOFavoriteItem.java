@@ -1,6 +1,5 @@
 package MidProject.MidProject.dto;
 
-import MidProject.MidProject.peristence.entity.Category;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;

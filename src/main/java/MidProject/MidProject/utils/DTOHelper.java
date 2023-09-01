@@ -2,9 +2,9 @@ package MidProject.MidProject.utils;
 
 import MidProject.MidProject.dto.DTOCategoryItem;
 import MidProject.MidProject.dto.DTOCategoryListItem;
-import MidProject.MidProject.peristence.entity.Category;
-import MidProject.MidProject.peristence.repository.ICategoryRepository;
-import MidProject.MidProject.peristence.repository.IFavoriteRepository;
+import MidProject.MidProject.persistence.entity.Category;
+import MidProject.MidProject.persistence.repository.ICategoryRepository;
+import MidProject.MidProject.persistence.repository.IFavoriteRepository;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;

@@ -1,4 +1,4 @@
-package MidProject.MidProject.peristence.entity;
+package MidProject.MidProject.persistence.entity;
 
 import jakarta.persistence.*;
 import lombok.*;

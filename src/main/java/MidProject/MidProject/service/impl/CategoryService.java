@@ -1,16 +1,16 @@
 package MidProject.MidProject.service.impl;
 
 import MidProject.MidProject.dto.*;
+import MidProject.MidProject.exception.BusinessException;
 import MidProject.MidProject.exception.NotFoundException;
-import MidProject.MidProject.peristence.entity.Category;
-import MidProject.MidProject.peristence.entity.Favorite;
-import MidProject.MidProject.peristence.repository.ICategoryRepository;
+import MidProject.MidProject.persistence.entity.Category;
+import MidProject.MidProject.persistence.repository.ICategoryRepository;
 import MidProject.MidProject.service.ICategoryService;
 import MidProject.MidProject.utils.DTOHelper;
 import jakarta.transaction.Transactional;
+import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.stereotype.Service;
 
-import java.util.Date;
 import java.util.List;
 
 @Service
@@ -42,10 +42,15 @@ import java.util.List;
     public DTOCategoryItem createCategory(DTOCategoryCreation newCategory) {
 
         Category entity = new Category();
+
         entity.setId(newCategory.getId());
         entity.setLabel(newCategory.getLabel());
 
-        entity = iCategoryRepository.save(entity);
+        try {
+            entity = iCategoryRepository.save(entity);
+        } catch (DataIntegrityViolationException e) {
+            throw new BusinessException("Cette catégorie existe déjà !");
+        }
         return new DTOCategoryItem(entity.getId(), entity.getLabel());
     }
 }
