@@ -1,15 +1,16 @@
 package MidProject.MidProject.service.impl;
 
-import MidProject.MidProject.dto.DTOCategoryItem;
-import MidProject.MidProject.dto.DTOCategoryListItem;
+import MidProject.MidProject.dto.*;
 import MidProject.MidProject.exception.NotFoundException;
 import MidProject.MidProject.peristence.entity.Category;
+import MidProject.MidProject.peristence.entity.Favorite;
 import MidProject.MidProject.peristence.repository.ICategoryRepository;
 import MidProject.MidProject.service.ICategoryService;
 import MidProject.MidProject.utils.DTOHelper;
 import jakarta.transaction.Transactional;
 import org.springframework.stereotype.Service;
 
+import java.util.Date;
 import java.util.List;
 
 @Service
@@ -35,5 +36,16 @@ import java.util.List;
     public DTOCategoryItem findById(long id) {
         Category cat = iCategoryRepository.findById(id).orElseThrow(() -> new NotFoundException("No corresponding category found with the id " + id + " !!" ));
         return dtoHelper.toCategoryItem(cat);
+    }
+
+    @Override
+    public DTOCategoryItem createCategory(DTOCategoryCreation newCategory) {
+
+        Category entity = new Category();
+        entity.setId(newCategory.getId());
+        entity.setLabel(newCategory.getLabel());
+
+        entity = iCategoryRepository.save(entity);
+        return new DTOCategoryItem(entity.getId(), entity.getLabel());
     }
 }

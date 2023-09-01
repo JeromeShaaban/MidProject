@@ -38,12 +38,13 @@ https://cdn.jsdelivr.net/npm/sweetalert2@11.7.27/dist/sweetalert2.min.css
               </div>
             </div>
             <div class="column  is-narrow">
-              <button class="button is-primary" data-ng-click="setMode('creation')">Add</button>
+              <button class="button is-primary" data-ng-click="setMode('favoriteCreation')">Add Favorite</button>
+              <button class="button is-success" data-ng-click="setMode('categoryCreation')">Add Category</button>
             </div>
           </div>
         </div>
 
-        <div class="box" data-ng-if="mode == 'creation' || mode == 'edition'">
+        <div class="box" data-ng-if="mode == 'favoriteCreation' || mode == 'favoriteEdition'">
           <div class="columns">
             <div class="column">
               <h2 class="title">Definition of a new Favorite</h2>
@@ -72,6 +73,24 @@ https://cdn.jsdelivr.net/npm/sweetalert2@11.7.27/dist/sweetalert2.min.css
                   </div>
                 </div>
                 <button class="button is-primary" type="button" data-ng-disabled="form.$invalid" data-ng-click="validate()">OK</button>
+                <button class="button is-default" type="button" data-ng-click="cancel()">Cancel</button>
+              </form>
+            </div>
+          </div>
+        </div>
+
+        <div class="box" data-ng-if="mode == 'categoryCreation' || mode == 'categoryEdition'">
+          <div class="columns">
+            <div class="column">
+              <h2 class="title">Definition of a new Category</h2>
+              <form name="form" class="form-validation" novalidate role="form">
+                <div class="field">
+                  <label class="label">Label *</label>
+                  <div class="control">
+                    <input type="text" data-ng-model="category.label" class="input" required="required" />
+                  </div>
+                </div>
+                <button class="button is-primary" type="button" data-ng-disabled="form.$invalid" data-ng-click="validateCategory()">OK</button>
                 <button class="button is-default" type="button" data-ng-click="cancel()">Cancel</button>
               </form>
             </div>

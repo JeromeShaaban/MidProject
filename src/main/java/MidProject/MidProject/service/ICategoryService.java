@@ -1,5 +1,6 @@
 package MidProject.MidProject.service;
 
+import MidProject.MidProject.dto.DTOCategoryCreation;
 import MidProject.MidProject.dto.DTOCategoryItem;
 import MidProject.MidProject.dto.DTOCategoryListItem;
 
@@ -10,4 +11,6 @@ public interface ICategoryService {
     List<DTOCategoryListItem> findAll();
 
     DTOCategoryItem findById(long id);
+
+    DTOCategoryItem createCategory(DTOCategoryCreation newCategory);
 }

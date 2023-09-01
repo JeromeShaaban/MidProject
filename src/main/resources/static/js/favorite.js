@@ -13,8 +13,10 @@ angular.module('favoriteApp', [])
 
         $scope.favorite = {};
 
+        $scope.category = {};
+
         $scope.setMode = function(text) {
-            if (text === 'creation') {
+            if (text === 'favoriteCreation') {
                 $scope.realCategories = $scope.categories.filter(function(c) { return c.id !== 0 });
                 var idx = $scope.realCategories.map(function(c) { return c.id }).indexOf($scope.filter.category);
                 if (idx < 0) idx = 0;
@@ -24,9 +26,24 @@ angular.module('favoriteApp', [])
                     category: $scope.realCategories[idx].id
                 }
             }
-            if (text === 'edition') {
+
+            if (text === 'favoriteEdition') {
                 $scope.realCategories = $scope.categories.filter(function(c) { return c.id !== 0 });
             }
+
+            if (text === 'categoryCreation') {
+                $scope.category = {
+                    label: ''
+                }
+            }
+
+            if (text === 'categoryEdition') {
+                $scope.realCategories = $scope.categories.filter(function(c) { return c.id !== 0 });
+                $scope.category = {
+                    label: ''
+                }
+            }
+
             $scope.mode = text;
         }
 
@@ -36,20 +53,35 @@ angular.module('favoriteApp', [])
 
         $scope.edit = function(f) {
         $scope.favorite = {id: f.id, link: f.link, name: f.name, category: f.categoryDto.id};
-        $scope.setMode('edition');
+        $scope.setMode('favoriteEdition');
         }
 
         // Pour voir toutes les URL de CRUD définies dans le back : http://localhost:8080/swagger-ui/index.html
 
         $scope.validate = function() {
-            $http.post('api/category/' + $scope.favorite.category + '/favorites' , { id: $scope.favorite.id, link: $scope.favorite.link, name: $scope.favorite.name }).then(
-                function() {
-                    $scope.refresh();
-                    $scope.setMode('view');
-                }, function(error) {
-                    alert(error.data.message);
-                }
-            )
+                $http.post('api/category/' + $scope.favorite.category + '/favorites' , { id: $scope.favorite.id, link: $scope.favorite.link, name: $scope.favorite.name })
+                .then(
+                    function() {
+                        $scope.refresh();
+                        $scope.setMode('view');
+                    },
+                    function(error) {
+                        alert(error.data.message);
+                    }
+                )
+        }
+
+        $scope.validateCategory = function() {
+                $http.post('api/category/all' , { id: $scope.category.id, label: $scope.category.label })
+                .then(
+                    function() {
+                        $scope.refresh();
+                        $scope.setMode('view');
+                    },
+                    function(error) {
+                        alert(error.data.message);
+                    }
+                )
         }
 
         $scope.deletion = function(id) {

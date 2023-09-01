@@ -1,9 +1,6 @@
 package MidProject.MidProject.controller;
 
-import MidProject.MidProject.dto.DTOCategoryItem;
-import MidProject.MidProject.dto.DTOCategoryListItem;
-import MidProject.MidProject.dto.DTOFavoriteCreation;
-import MidProject.MidProject.dto.DTOFavoriteItem;
+import MidProject.MidProject.dto.*;
 import MidProject.MidProject.service.ICategoryService;
 import MidProject.MidProject.service.IFavoriteService;
 import org.springframework.web.bind.annotation.*;
@@ -41,6 +38,11 @@ public class CategoryController {
     @PostMapping(path = "/{id}/favorites")
     public DTOFavoriteItem createFavorite(@PathVariable(name = "id") long categoryId, @RequestBody DTOFavoriteCreation newFavorite) {
         return iFavoriteService.createFavorite(categoryId, newFavorite);
+    }
+
+    @PostMapping(path = "/all")
+    public DTOCategoryItem createCategory(@RequestBody DTOCategoryCreation newCategory) {
+        return iCategoryService.createCategory(newCategory);
     }
 
 }
